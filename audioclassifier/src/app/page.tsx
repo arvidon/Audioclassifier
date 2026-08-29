@@ -9,6 +9,7 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
 import Waveform from "~/components/Waveform";
+import { env } from "~/env";
 
 interface Prediction {
   class: string;
@@ -140,7 +141,7 @@ export default function HomePage() {
           ),
         );
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_INFERENCE_URL}`, {
+        const response = await fetch(env.NEXT_PUBLIC_INFERENCE_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ audio_data: base64String }),
