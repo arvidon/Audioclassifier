@@ -1,29 +1,32 @@
-# Create T3 App
+# Audio Classifier frontend
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Next.js frontend for the audio classifier. Model inference runs on Modal; Railway hosts only this frontend.
 
-## What's next? How do I make an app with this?
+## Run locally
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+```sh
+npm ci
+cp .env.example .env
+npm run dev
+```
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Deploy on Railway
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+Set the service root directory to `/audioclassifier`. For a local CLI deployment, upload the repository root so Railway can locate that directory.
 
-## Learn More
+Set `NEXT_PUBLIC_INFERENCE_URL` to the existing Modal endpoint before building:
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+```text
+https://arvidon--audio-cnn-inference-audioclassifier-inference.modal.run
+```
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+This public variable is embedded into the browser bundle at build time; changing it requires a rebuild. Do not put Modal credentials in public variables.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Configure the Railway service with the Railpack builder, build command `npm run build`, start command `npm run start -- --hostname 0.0.0.0`, and health check path `/`. Next.js uses Railway's injected `PORT`. Generate a Railway domain for public access.
 
-## How do I deploy this?
+```sh
+railway up .. --path-as-root
+railway domain
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+For an existing service, link it first with `railway link`. Validate locally with `npm run build`.
